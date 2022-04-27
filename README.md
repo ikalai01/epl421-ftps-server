@@ -3,7 +3,7 @@
 ### **This is an implementation of an FTP server over TLSv3 Socket Connection**
 
 We implemented a server that is running the `FTP protocol` over `TLSv3 Sockets` in the programming language C. This implementation is based on the following paper:
-RFC 959 - File Transfer Protocol (FTP)
+RFC 959 - File Transfer Protocol (FTP).
 
 ### Before you start
 - In order for the server to run, a certificate and a key must be provided.
