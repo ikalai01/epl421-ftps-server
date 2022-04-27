@@ -1,0 +1,6 @@
+/src/.idea
+/src/cmake-build-debug
+/build
+.vscode
+*.exe
+*.pem
