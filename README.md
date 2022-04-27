@@ -31,7 +31,6 @@ RFC 959 - File Transfer Protocol (FTP).
 
 - *Compile code using: `make` or `make all` .*
 - *Run code using: `./server` or `./server -default`*
-- *File can be manually compiled using the provided compile.sh file*
 
 >#### The server runs in 2 modes
 >- Mode A: Run using: `./server` : _The server will use the values defined in the `config.conf` file. In case the file does not exist, the program will exit._
