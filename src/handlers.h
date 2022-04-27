@@ -1,4 +1,6 @@
 #include "common.h"
+#include "support.h"
+#include "unused.h"
 
 #ifndef sendfile
   #define BUF_SIZE 8192
