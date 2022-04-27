@@ -566,9 +566,7 @@ int handle_client(const struct client_t * client)
             int slashes=0;
             for(; i < strlen(arg); i++)
             {
-                if(arg[i] == '/')
-                    slashes++;
-                if ((isalnum(arg[i]) || arg[i] == '.' || arg[i] == '_' || arg[i] == '-') && slashes==2)
+                if ((isalnum(arg[i]) || arg[i] == '.' || arg[i] == '_' || arg[i] == '-' || arg[i] == '/' ))
                 {
                     d[c] = arg[i];
                     c++;
