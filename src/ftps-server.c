@@ -56,7 +56,8 @@ int start_server(struct server_config_t *config)
             perror("[-]Service untrapped error\n");
             return EXIT_FAILURE;
         }
-        printf("[\\]Client connected - new count: %d\n", ++state->active_connections);
+        state->active_connections++;
+        printf("[\\]Client connected - new count: %d\n", state->active_connections);
     }
 
     close(state->sock);
