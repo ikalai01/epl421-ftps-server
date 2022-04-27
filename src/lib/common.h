@@ -88,7 +88,6 @@ int start_server(struct server_config_t *config);
 int create_control_socket(const char *ip, const int port, const int reuse);
 int wait_client(int sock, SSL_CTX *ctx);
 int handle_client(const struct client_t * client);
-void handle_cwd(const struct client_t * client, char * arg);
 int init_thread_pool(thread_pool_t *pool, int num_threads);
 void cleanup_thread_pool(thread_pool_t *pool);
 

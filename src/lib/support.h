@@ -394,35 +394,6 @@ int create_socket(const int port, const int reuse)
     return sock;
 }
 
-
-void handle_cwd(const struct client_t * client, char * arg)
-{
-    char d[100];
-    if(arg[1] != '.'){   
-    int i = 0, c = 0;
-    
-    for(; i < strlen(arg); i++)
-    {
-        if (isalnum(arg[i]))
-        {
-            d[c] = arg[i];
-            c++;
-        }
-    } 
-        d[c] = '/';
-        d[c+1] = '\0';
-        strcat(dir, d);
-    }
-    else{
-        strcpy(d,"..");
-    }
-    
-    strcpy(dir,d);
-    chdir(dir);
-    char rep[] = "250 changed directory\r\n";
-    SSL_write(client->ssl, rep, strlen(rep));  
-}
-
 int init_thread_pool(thread_pool_t *pool, int num_threads)
 {
     printf("[+]Initializing thread pool with %d threads...\n", num_threads);

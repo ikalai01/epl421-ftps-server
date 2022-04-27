@@ -237,7 +237,8 @@ int handle_client(const struct client_t * client)
             char rep[] = "215 UNIX Type: L8\r\n";
             SSL_write(client->ssl, rep, strlen(rep));
         }
-        else if(strcmp(command, "FEAT\r\n") == 0 || strcmp(command, "FEAT") == 0){
+        else if(strcmp(command, "FEAT\r\n") == 0 || strcmp(command, "FEAT") == 0)
+        {
                 
             char rep[] = "211 UNIX Type: L8\r\n";
             SSL_write(client->ssl, rep, strlen(rep));
@@ -270,7 +271,32 @@ int handle_client(const struct client_t * client)
         }
         else if(strcmp(command, "CWD") == 0 || strcmp(command, "CWD\r\n") == 0)
         {
-            handle_cwd(client, arg);   
+            char d[100];
+            if(arg[1] != '.')
+            {   
+                int i = 0, c = 0;
+                
+                for(; i < strlen(arg); i++)
+                {
+                    if (isalnum(arg[i]))
+                    {
+                        d[c] = arg[i];
+                        c++;
+                    }
+                } 
+                    d[c] = '/';
+                    d[c+1] = '\0';
+                    strcat(dir, d);
+            }
+            else
+            {
+                strcpy(d,"..");
+            }
+            
+            strcpy(dir,d);
+            chdir(dir);
+            char rep[] = "250 changed directory\r\n";
+            SSL_write(client->ssl, rep, strlen(rep));     
         }
         else if(strcmp(command, "TYPE") == 0 || strcmp(command, "TYPE\r\n") == 0)
         {
