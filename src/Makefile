@@ -27,14 +27,13 @@ $(PROJ): $(OBJS)
 # purpose macro
 .a.o:
 	$(CC) $(CFLAGS) -c $<
+
 # there is a TAB for each identation.
 # To make all (program + manual) "make all"
 all :
 	make
-	make doxy
-# To make all (program + manual) "make doxy"
-doxy:
-	$(DOXYGEN) doxygen.conf &> doxygen.log
+	make clean
+
 # To clean .o files: "make clean"
 clean:
 	rm -rf *.o doxygen.log html

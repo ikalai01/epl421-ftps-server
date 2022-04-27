@@ -21,6 +21,8 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
+#define CONFIG_FILE "./config/config.conf"
+
 #define MAX_LINE_LEN 1024
 #define DEFAULT_NUM_THREADS 10
 #define DEFAULT_MAX_CONNECTIONS 1024 // max number of active tasks in the thread pool

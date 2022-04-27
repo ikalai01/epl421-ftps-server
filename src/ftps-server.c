@@ -1,5 +1,5 @@
-#include "common.h"
-#include "support.h"
+#include "lib/common.h"
+#include "lib/support.h"
 
 int start_server(struct server_config_t *config)
 {   
@@ -512,24 +512,18 @@ int handle_client(const struct client_t * client)
     return 0;
 }
 
-int main(int argc, char *argv[])
-{   
-    print_welcome();
-    struct server_config_t *config;
-    config = malloc(sizeof(struct server_config_t));
-    pid_t pid;
-    int status;
-
+int load_configuration(int argc, char *argv[], struct server_config_t *config)
+{
     if (argc == 1) 
     {
-        printf("[+]Using `config.conf` file\n");
+        char *config_file = CONFIG_FILE;
+        printf("[+]Using `%s` file\n", config_file);
         /* Use parse_config_file to parse the config file */
-        if (parse_config(config, "config.conf") == -1) 
+        if (parse_config(config, config_file) == -1) 
         {
             perror("[-]Failed to parse config file\n");
-            return -1;
+            return EXIT_FAILURE;
         }
-        
     } 
     else if (argc == 2 && strcmp(argv[1], "-default") == 0)
     {
@@ -550,10 +544,29 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
+    return EXIT_SUCCESS;
+}
+
+
+int main(int argc, char *argv[])
+{   
+    print_welcome();
+
+    struct server_config_t *config;
+    config = malloc(sizeof(struct server_config_t));
+
+    if (load_configuration(argc, argv, config) != 0) {
+        printf("[-]Error generating configuration\n");
+        return EXIT_FAILURE;
+    }
+
     #ifdef DEBUG
         /* Print config */
         print_config(config);
     #endif
+
+    pid_t pid;
+    int status;
 
     /* Create child process */
     if ((pid = fork()) == -1) 

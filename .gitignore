@@ -1,5 +1,6 @@
 /src/.idea
 /src/cmake-build-debug
+/src/ftps-server
 /build
 .vscode
 *.exe
