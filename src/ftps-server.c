@@ -271,30 +271,46 @@ int handle_client(const struct client_t * client)
         }
         else if(strcmp(command, "CWD") == 0 || strcmp(command, "CWD\r\n") == 0)
         {
-            char d[100];
-            if(arg[1] != '.')
-            {   
-                int i = 0, c = 0;
+	char d[100];
+	if(arg[1] != '.'){   
+	int i = 0, c = 0;
+	int form=0;
+	for(; i < strlen(arg); i++)
+	{
+	    if (isalnum(arg[i]) || arg[i] == '/' || arg[i] == '_' || arg[i] == '-')
+	    {
+		d[c] = arg[i];
+		c++;
+		if(arg[i] == '/')
+		    form++;
+	    }
+	}   
+	    d[c] = '/';
+	    d[c+1] = '\0';
+	    printf("%s ppp\n",dir);
+	    printf("%d mmmmmmmm\n",form);
+	    fflush(stdout);
+	    if(form>1){
+		d[c] = '\0';
+		strcpy(dir, d);
+	    }
+	    else
+		strcat(dir, d);
+	    printf("%s lll\n",dir);
+	}
+	else{
+		char *e;
+		int index;
+
+		e = strrchr(dir, '/');
+		index = (int)(e - dir);
+		dir[index] = '\0';
+		e = strrchr(dir, '/');
+		index = (int)(e - dir);
+		dir[index+1] = '\0';
+	}
                 
-                for(; i < strlen(arg); i++)
-                {
-                    if (isalnum(arg[i]))
-                    {
-                        d[c] = arg[i];
-                        c++;
-                    }
-                } 
-                    d[c] = '/';
-                    d[c+1] = '\0';
-                    strcat(dir, d);
-            }
-            else
-            {
-                strcpy(d,"..");
-            }
-            
-            strcpy(dir,d);
-            chdir(dir);
+
             char rep[] = "250 changed directory\r\n";
             SSL_write(client->ssl, rep, strlen(rep));     
         }
@@ -305,15 +321,12 @@ int handle_client(const struct client_t * client)
         }
         else if(strcmp(command, "LIST") == 0 || strcmp(command, "LIST\r\n") == 0)
         {
-            strcpy(dir,".");
+	    chdir(dir);
             if ((dp = opendir(dir)) == NULL )
             {
                 perror(dir);
                 return 0;
             }
-
-            chdir(dir);
-
             int sock2 = create_socket(dataport,1);
             char rep2[] = "150 Here comes the directory listing.\r\n";
             SSL_write(client->ssl, rep2, strlen(rep2));   
