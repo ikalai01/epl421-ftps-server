@@ -1,5 +1,49 @@
-#include "lib/common.h"
-#include "lib/support.h"
+/**
+ * @file ftps-server.c
+ * @author Canciu Ionut - Cristian and Ilias Kalaitzidis
+ * @brief 
+ * @version 0.1
+ * @date 2022-04-27
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+#include "ftps-server.h"
+
+int load_configuration(const int argc, char *argv[], struct server_config_t *config)
+{
+    if (argc == 1) 
+    {
+        char *config_file = CONFIG_FILE;
+        printf("[+]Using `%s` file\n", config_file);
+        /* Use parse_config_file to parse the config file */
+        if (parse_config(config, config_file) == -1) 
+        {
+            perror("[-]Failed to parse config file\n");
+            return EXIT_FAILURE;
+        }
+    } 
+    else if (argc == 2 && strcmp(argv[1], "-default") == 0)
+    {
+        printf("[+]Using default configuration\n");
+        config->num_threads = DEFAULT_NUM_THREADS;
+        config->max_connections = DEFAULT_MAX_CONNECTIONS;
+        config->ip = DEFAULT_IP;
+        config->port = DEFAULT_PORT;
+        config->reuse_socket = REUSE_SOCKET;
+        config->home_dir = DEFAULT_HOME_DIR;
+        config->cert_file = DEFAULT_CERT_FILE;
+        config->key_file = DEFAULT_KEY_FILE;
+    }
+    else 
+    {
+        printf("[-]Invalid arguments\n");
+        print_usage();
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
 
 int start_server(struct server_config_t *config)
 {   
@@ -511,42 +555,6 @@ int handle_client(const struct client_t * client)
     }
     return 0;
 }
-
-int load_configuration(int argc, char *argv[], struct server_config_t *config)
-{
-    if (argc == 1) 
-    {
-        char *config_file = CONFIG_FILE;
-        printf("[+]Using `%s` file\n", config_file);
-        /* Use parse_config_file to parse the config file */
-        if (parse_config(config, config_file) == -1) 
-        {
-            perror("[-]Failed to parse config file\n");
-            return EXIT_FAILURE;
-        }
-    } 
-    else if (argc == 2 && strcmp(argv[1], "-default") == 0)
-    {
-        printf("[+]Using default configuration\n");
-        config->num_threads = DEFAULT_NUM_THREADS;
-        config->max_connections = DEFAULT_MAX_CONNECTIONS;
-        config->ip = DEFAULT_IP;
-        config->port = DEFAULT_PORT;
-        config->reuse_socket = REUSE_SOCKET;
-        config->home_dir = DEFAULT_HOME_DIR;
-        config->cert_file = DEFAULT_CERT_FILE;
-        config->key_file = DEFAULT_KEY_FILE;
-    }
-    else 
-    {
-        printf("[-]Invalid arguments\n");
-        print_usage();
-        return EXIT_FAILURE;
-    }
-
-    return EXIT_SUCCESS;
-}
-
 
 int main(int argc, char *argv[])
 {   
