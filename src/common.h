@@ -88,6 +88,7 @@ int wait_client(int sock, SSL_CTX *ctx);
 int handle_client(const struct client_t * client);
 void handle_cwd(const struct client_t * client, char * arg);
 int init_thread_pool(thread_pool_t *pool, int num_threads);
+void cleanup_thread_pool(thread_pool_t *pool);
 
 /* Helper functions */
 int parse_config(server_config_t *config, char *filename);

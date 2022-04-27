@@ -441,7 +441,12 @@ int init_thread_pool(thread_pool_t *pool, int num_threads)
     return 0;
 }
 
-
+void cleanup_thread_pool(thread_pool_t *pool)
+{
+    free(pool->threads);
+    pthread_mutex_destroy(&pool->lock);
+    pthread_cond_destroy(&pool->cond);
+}
 
 void sig_handler(int signum)
 {

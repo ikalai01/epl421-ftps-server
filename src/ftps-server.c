@@ -51,7 +51,7 @@ int start_server(struct server_config_t *config)
     while(!stop) 
     {   
         printf("[/]Listening...\n");
-        if(wait_client(state->sock, state->ctx) == -1) 
+        if (wait_client(state->sock, state->ctx) == -1) 
         {
             perror("[-]Service untrapped error\n");
             return EXIT_FAILURE;
