@@ -244,7 +244,7 @@ int handle_client(const struct client_t * client)
             SSL_write(client->ssl, rep, strlen(rep));
         }
         else if (strcmp(command, "PASV\r\n") == 0 || strcmp(command, "PASV") == 0) 
-        {   
+        {
             srand(time(NULL));
             int p1 = 128 + (rand() % 64);
             int p2 = rand() % 0xff;
@@ -259,7 +259,7 @@ int handle_client(const struct client_t * client)
             SSL_write(client->ssl, rep, strlen(rep));
         }
         else if(strcmp(command, "PROT") == 0 || strcmp(command, "PROT\r\n") == 0)
-        { 
+        {
             char rep[] = "200 PROT now Private\r\n";
             SSL_write(client->ssl, rep, strlen(rep));
         }
@@ -271,46 +271,45 @@ int handle_client(const struct client_t * client)
         }
         else if(strcmp(command, "CWD") == 0 || strcmp(command, "CWD\r\n") == 0)
         {
-	char d[100];
-	if(arg[1] != '.'){   
-	int i = 0, c = 0;
-	int form=0;
-	for(; i < strlen(arg); i++)
-	{
-	    if (isalnum(arg[i]) || arg[i] == '/' || arg[i] == '_' || arg[i] == '-')
-	    {
-		d[c] = arg[i];
-		c++;
-		if(arg[i] == '/')
-		    form++;
-	    }
-	}   
-	    d[c] = '/';
-	    d[c+1] = '\0';
-	    printf("%s ppp\n",dir);
-	    printf("%d mmmmmmmm\n",form);
-	    fflush(stdout);
-	    if(form>1){
-		d[c] = '\0';
-		strcpy(dir, d);
-	    }
-	    else
-		strcat(dir, d);
-	    printf("%s lll\n",dir);
-	}
-	else{
-		char *e;
-		int index;
+            char d[100];
+            if(arg[1] != '.') 
+            { 
+                int i = 0, c = 0;
+                int form = 0;
+                for(; i < strlen(arg); i++)
+                {
+                    if (isalnum(arg[i]) || arg[i] == '/' || arg[i] == '_' || arg[i] == '-')
+                    {
+                    d[c] = arg[i];
+                    c++;
+                    if(arg[i] == '/')
+                        form ++;
+                    }
+                }   
 
-		e = strrchr(dir, '/');
-		index = (int)(e - dir);
-		dir[index] = '\0';
-		e = strrchr(dir, '/');
-		index = (int)(e - dir);
-		dir[index+1] = '\0';
-	}
+                d[c] = '/';
+                d[c+1] = '\0';
+                fflush(stdout);
+                if(form > 1){
+                    d[c] = '\0';
+                    strcpy(dir, d);
+                }
+                else
+                strcat(dir, d);
+            }
+            else
+            {
+                char *e;
+                int index;
+
+                e = strrchr(dir, '/');
+                index = (int)(e - dir);
+                dir[index] = '\0';
+                e = strrchr(dir, '/');
+                index = (int)(e - dir);
+                dir[index+1] = '\0';
+            }
                 
-
             char rep[] = "250 changed directory\r\n";
             SSL_write(client->ssl, rep, strlen(rep));     
         }
@@ -321,7 +320,7 @@ int handle_client(const struct client_t * client)
         }
         else if(strcmp(command, "LIST") == 0 || strcmp(command, "LIST\r\n") == 0)
         {
-	    chdir(dir);
+	        chdir(dir);
             if ((dp = opendir(dir)) == NULL )
             {
                 perror(dir);
